@@ -3,9 +3,10 @@
 #include <netinet/in.h>
 #include <pcap.h>
 #include <sys/types.h>
-#define ETHER_ADDR_LEN 6
 /* Ethernet header */
 struct sniff_ethernet {
+// if you define out of struct then it wouldn't loaded by #include
+#define ETHER_ADDR_LEN 6
     u_char ether_dhost[ETHER_ADDR_LEN]; // Destination host address : 6B
     u_char ether_shost[ETHER_ADDR_LEN]; // Source host address      : 6B
     u_short ether_type;                 // IP? ARP? RARP? etc       : 2B
