@@ -5,6 +5,7 @@
 #include <pcap.h>
 #include <sys/types.h>
 #include "pdu_struct.h"
+#include "data_format.h"
 const int FAILURE = -1;       // pcap function return -1 when fail
 char error[PCAP_ERRBUF_SIZE]; // most pcap function take errbuf as argument. When error ouccr, return info with errbuf
 int main(int argc, char *argv[]) {
@@ -108,6 +109,7 @@ int main(int argc, char *argv[]) {
     // magical typecasting
     // ethernet header
     ethernet = (struct sniff_ethernet *)(packet);
+    for (int i = 0; i < 6; i++) puts(byte_to_bin_str(ethernet->ether_dhost[0]));
     // ip header
     ip      = (struct sniff_ip *)(packet + SIZE_ETHERNET);
     size_ip = IP_HL(ip) * 4;
