@@ -1,0 +1,4 @@
+# Vim swap file
+*.swp
+# Executable file
+*.out
