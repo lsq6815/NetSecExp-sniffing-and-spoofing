@@ -1,13 +1,27 @@
+/*
+ * <netinet/in.h> contain function to convert bits between NBO(Network Byte Order)
+ * and HBO(Host Byte Order). Since x86 is little-endian and NBO is big-endian.
+ * So must use it to solve encoding problem
+ */
+#include <netinet/in.h>
 #include <arpa/inet.h>
 #include <asm-generic/socket.h>
-#include <netinet/in.h>
+/* 
+ * pcap itself. You must include it if you want to capture packet.
+ */
 #include <pcap/dlt.h>
+#include <pcap.h>
 #include <pcap/pcap.h>
+/*
+ * standard library
+ */
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <pcap.h>
 #include <sys/types.h>
+/*
+ * User defined library
+ */
 #include "pdu_struct.h"
 #include "data_format.h"
 
@@ -100,7 +114,7 @@ int main(int argc, char *argv[]) {
     packet = pcap_next(handle, &header);
 
     /* print its length */
-    fprintf(stdout, "Jacked a packet with length of [%d]\n", header.len);
+    fprintf(stdout, "Jacked a packet with length of [%d], Captured length of [%d]\n", header.len, header.caplen);
     
     /* use pcap_loop */
     // int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user);
@@ -123,26 +137,30 @@ int main(int argc, char *argv[]) {
     const struct sniff_ethernet *ethernet; // the ethernet header
     const struct sniff_ip *ip;             // the ip header
     const struct sniff_tcp *tcp;           // the tcp header
-    const u_char *payload;                   // packet payload
-    // magical typecasting
-    // ethernet header
+    const u_char *payload;                 // packet payload
+    /* magical typecasting */
+    /* ethernet header */
     ethernet = (struct sniff_ethernet *)(packet);
-    // ip header
+    fprintf(stdout, "HOST src: %s\n", ether_host_to_str(ethernet->ether_shost));
+    fprintf(stdout, "HOST dst: %s\n", ether_host_to_str(ethernet->ether_dhost));
+    /* ip header */
     ip      = (struct sniff_ip *)(packet + SIZE_ETHERNET);
     size_ip = IP_HL(ip) * 4;
     if (size_ip < 20) {
         fprintf(stderr, "Invalid IP header length: %u bytes\n", size_ip);
         return -1;
     }
-    fprintf(stdout, "IP src: %s\n", inet_ntoa(ip->ip_src));
-    fprintf(stdout, "IP dst: %s\n", inet_ntoa(ip->ip_dst));
-    // tcp header
+    fprintf(stdout, "IP src: %s\n", ip_addr_to_str(ip->ip_src));
+    fprintf(stdout, "IP dst: %s\n", ip_addr_to_str(ip->ip_dst));
+    /* tcp header */
     tcp      = (struct sniff_tcp *)(packet + SIZE_ETHERNET + size_ip);
     size_tcp = TH_OFF(tcp) * 4;
     if (size_tcp < 20) {
         fprintf(stderr, "Invalid IP header length: %u bytes\n", size_ip);
     }
-    // payload
+    fprintf(stdout, "PORT src: %s\n", tcp_port_to_str(tcp->th_sport));
+    fprintf(stdout, "PORT dst: %s\n", tcp_port_to_str(tcp->th_dport));
+    /* payload */
     payload = (u_char *)(packet + SIZE_ETHERNET + size_ip + size_tcp);
 
     /* 7. Close the session */

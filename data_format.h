@@ -5,10 +5,10 @@
 #include <stdlib.h>
 #include "pdu_struct.h"
 typedef char * c_str;
-c_str byte_to_bin_str(u_char byte);
-c_str byte_to_hex_str(u_char byte);
-/* Convert the raw data of PDU to human readable format */
-c_str ether_host_to_str(const u_char *host);
-
-c_str ip_addr_to_str(bpf_u_int32 addr);
+/* Convert raw ether data of PDU to human readable format */
+c_str ether_host_to_str(const u_char host[]);
+/* Convert raw ip data to number-and-dot notation */
+c_str ip_addr_to_str(struct in_addr addr);
+/* Convert raw tcp data to string */
+c_str tcp_port_to_str(u_short port);
 #endif

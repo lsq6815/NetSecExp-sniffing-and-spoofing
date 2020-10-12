@@ -8,6 +8,10 @@
 struct sniff_ethernet {
 // if you define out of struct then it wouldn't loaded by #include
 #define ETHER_ADDR_LEN 6
+    // If you dont use char array, then you have to deal with NBO
+    // But with char array, they keep big-endian. if you use a int48 
+    // to store it, then they turn into little-endian. If you process with
+    // bit operation, you will find you reserved it.
     u_char ether_dhost[ETHER_ADDR_LEN]; // Destination host address : 6B
     u_char ether_shost[ETHER_ADDR_LEN]; // Source host address      : 6B
     u_short ether_type;                 // IP? ARP? RARP? etc       : 2B
