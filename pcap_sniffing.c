@@ -133,6 +133,7 @@ int main(int argc, char *argv[]) {
     const int SIZE_ETHERNET = 14; // ethernet's frame size is always exactly 14B
     u_int size_ip;                // size of ip packet
     u_int size_tcp;               // size of tcp segment
+    u_int size_payload;           // size of payload
 
     const struct sniff_ethernet *ethernet; // the ethernet header
     const struct sniff_ip *ip;             // the ip header
@@ -143,6 +144,8 @@ int main(int argc, char *argv[]) {
     ethernet = (struct sniff_ethernet *)(packet);
     fprintf(stdout, "HOST src: %s\n", ether_host_to_str(ethernet->ether_shost));
     fprintf(stdout, "HOST dst: %s\n", ether_host_to_str(ethernet->ether_dhost));
+    fprintf(stdout, "Ethernet Header is fixed to 14B\n");
+
     /* ip header */
     ip      = (struct sniff_ip *)(packet + SIZE_ETHERNET);
     size_ip = IP_HL(ip) * 4;
@@ -152,6 +155,7 @@ int main(int argc, char *argv[]) {
     }
     fprintf(stdout, "IP src: %s\n", ip_addr_to_str(ip->ip_src));
     fprintf(stdout, "IP dst: %s\n", ip_addr_to_str(ip->ip_dst));
+    fprintf(stdout, "IP Header size: %u\n", size_ip);
     /* tcp header */
     tcp      = (struct sniff_tcp *)(packet + SIZE_ETHERNET + size_ip);
     size_tcp = TH_OFF(tcp) * 4;
@@ -160,9 +164,14 @@ int main(int argc, char *argv[]) {
     }
     fprintf(stdout, "PORT src: %s\n", tcp_port_to_str(tcp->th_sport));
     fprintf(stdout, "PORT dst: %s\n", tcp_port_to_str(tcp->th_dport));
+    fprintf(stdout, "TCP Header size: %u\n", size_tcp);
     /* payload */
     payload = (u_char *)(packet + SIZE_ETHERNET + size_ip + size_tcp);
-
+    size_payload = header.caplen - 14 - size_ip - size_tcp;
+    fprintf(stdout, "Payload size: %u\n", size_payload);
+    if (size_payload > 0) {
+        fprintf(stdout, "Content:\n%s\n", payload_to_ascii(payload, size_payload));
+    }
     /* 7. Close the session */
     pcap_close(handle);
     return 0;
