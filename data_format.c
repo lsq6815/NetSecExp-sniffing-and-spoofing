@@ -36,8 +36,15 @@ c_str ether_host_to_str(const u_char *host) {
     return "To Be Continuing";
 }
 
-c_str ip_addr_to_str(const struct in_addr *addr) {
-    c_str result = (c_str)malloc(32);
-    strcpy(result, byte_to_bin_str((addr->s_addr >> 24)));
-    return "To Be Continuing";
+c_str ip_addr_to_str(bpf_u_int32 addr) {
+    // Don't forget \0
+    c_str result = (c_str)malloc(16);
+    sprintf(result, "%d.%d.%d.%d", 
+        (addr >> 24) & 0xff,
+        (addr >> 16) & 0xff,
+        (addr >> 8)  & 0xff,
+        (addr >> 0)  & 0xff
+    );
+    result[15] = '\0';
+    return result;
 }

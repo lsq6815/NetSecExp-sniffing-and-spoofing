@@ -4,6 +4,7 @@
 #include <pcap.h>
 #include <sys/types.h>
 /* Ethernet header */
+#pragma pcak()
 struct sniff_ethernet {
 // if you define out of struct then it wouldn't loaded by #include
 #define ETHER_ADDR_LEN 6

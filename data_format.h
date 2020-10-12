@@ -10,5 +10,5 @@ c_str byte_to_hex_str(u_char byte);
 /* Convert the raw data of PDU to human readable format */
 c_str ether_host_to_str(const u_char *host);
 
-c_str ip_addr_to_str(const struct in_addr *addr);
+c_str ip_addr_to_str(bpf_u_int32 addr);
 #endif

@@ -1,13 +1,20 @@
+#include <arpa/inet.h>
 #include <asm-generic/socket.h>
+#include <netinet/in.h>
 #include <pcap/dlt.h>
 #include <pcap/pcap.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include <pcap.h>
 #include <sys/types.h>
 #include "pdu_struct.h"
 #include "data_format.h"
+
+/* Global Variables */
 const int FAILURE = -1;       // pcap function return -1 when fail
 char error[PCAP_ERRBUF_SIZE]; // most pcap function take errbuf as argument. When error ouccr, return info with errbuf
+
 int main(int argc, char *argv[]) {
 
     /* 1. Fetch devices info */
@@ -24,6 +31,7 @@ int main(int argc, char *argv[]) {
         );
     }
     const char * const dev = devices->name;
+    fprintf(stdout, "Choose default devices: %s\n", dev);
 
     /* 2. Detect the net and mask of device */
     bpf_u_int32 mask;
@@ -33,6 +41,12 @@ int main(int argc, char *argv[]) {
        net  = 0;
        mask = 0;
     }
+    fprintf(stdout, "Device %s:\n" "\tIP:\t%s\n" "\tMask:\t%s\n",
+            dev,
+            // must add strdup or the string will repeat the first string, such weird
+            strdup(inet_ntoa((struct in_addr){ net })),
+            strdup(inet_ntoa((struct in_addr){ mask }))
+    );
 
     /* 3. Open device for sniffing */
     // pcap_t *pcap_open_live(char *device, int snaplen, int promisc, int to_ms, char *ebuf)
@@ -47,12 +61,14 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Couldn't open device %s: %s\nTry `sudo` maybe?\n", dev, error);
         return -1;
     }
+    fprintf(stdout, "Open device %s success!\n", dev);
     
     /* 4. Detect the link-layer header type */
     // LINKTYPE_ETHERNET = 1 = DLT_EN10MB
     if (pcap_datalink(handle) != DLT_EN10MB) {
         fprintf(stderr, "Devices %s doesn't provide Ethernet headers - not supported\n", dev);
     }
+    fprintf(stdout, "Device %s support Ethernet headers\n", dev);
 
     /* 5. Complier filter */
     // see the grammar of filter in `man pcap-filter -s 7`
@@ -64,13 +80,15 @@ int main(int argc, char *argv[]) {
     // netmask  : as the name say
     // return   : -1 for failure, others for success
     struct bpf_program fp;
-    char filter_exp[] = "port 80";
+    char filter_exp[] = "tcp and port https";
+    fprintf(stdout, "Compiling filter %s\n", filter_exp);
     if (pcap_compile(handle, &fp, filter_exp, 0, net) == FAILURE) {
         fprintf(stderr, "Couldn't parse filter %s: %s\n", filter_exp, pcap_geterr(handle));
         return -1;
     }
 
     /* 6. Apply filter */
+    fprintf(stdout, "Install BFP\n");
     if (pcap_setfilter(handle, &fp) == FAILURE) {
         fprintf(stderr, "Couldn't install filter %s: %s\n", filter_exp, pcap_geterr(handle));
         return -1;
@@ -109,7 +127,6 @@ int main(int argc, char *argv[]) {
     // magical typecasting
     // ethernet header
     ethernet = (struct sniff_ethernet *)(packet);
-    for (int i = 0; i < 6; i++) puts(byte_to_bin_str(ethernet->ether_dhost[0]));
     // ip header
     ip      = (struct sniff_ip *)(packet + SIZE_ETHERNET);
     size_ip = IP_HL(ip) * 4;
@@ -117,6 +134,8 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Invalid IP header length: %u bytes\n", size_ip);
         return -1;
     }
+    fprintf(stdout, "IP src: %s\n", inet_ntoa(ip->ip_src));
+    fprintf(stdout, "IP dst: %s\n", inet_ntoa(ip->ip_dst));
     // tcp header
     tcp      = (struct sniff_tcp *)(packet + SIZE_ETHERNET + size_ip);
     size_tcp = TH_OFF(tcp) * 4;
