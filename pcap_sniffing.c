@@ -30,15 +30,21 @@ const int FAILURE = -1;       // pcap function return -1 when fail
 char error[PCAP_ERRBUF_SIZE]; // most pcap function take errbuf as argument. When error ouccr, return info with errbuf
 
 int main(int argc, char *argv[]) {
+    /* config here */
+    const u_int TIME_OUT_MS       = 1000; // read time out by milliseconds
+    const int IS_PROMISC_MODE     = 1;
+    const char *filter_exp        = "tcp and port https"; // the filter to compile
+    const int IS_COMPILE_OPTIMIZE = 0; // whether optimize the filter been compiled
+
 
     /* 1. Fetch devices info */
     pcap_if_t *devices, *temp;
+    int i;
     if (pcap_findalldevs(&devices, error) == FAILURE) {
         fprintf(stderr, "Error in pcap findalldevs:\n%s\n", error);
         return -1;
     }
     printf("Interfaces present on the system are:\n");
-    int i;
     for (temp = devices, i = 0; temp != NULL; temp = temp->next) {
         fprintf(stdout, "%d: %s\n\t%s\n", ++i, temp->name, 
             temp->description != NULL ? temp->description : "No description available"
@@ -51,7 +57,7 @@ int main(int argc, char *argv[]) {
     bpf_u_int32 mask;
     bpf_u_int32 net;
     if (pcap_lookupnet(dev, &net, &mask, error) == FAILURE) {
-       fprintf(stderr, "Can't get net, mask for device %s\n", dev);
+       fprintf(stderr, "Can't get net, mask for device %s\n%s\n", dev, error);
        net  = 0;
        mask = 0;
     }
@@ -70,7 +76,7 @@ int main(int argc, char *argv[]) {
     // to_ms   : read time out in milliseconds, 0 means no time out
     // ebuf    : store error info of this function
     pcap_t *handle; // the capture session
-    handle = pcap_open_live(dev, BUFSIZ, 1, 1000, error);
+    handle = pcap_open_live(dev, BUFSIZ, IS_PROMISC_MODE, TIME_OUT_MS, error);
     if (handle == NULL) {
         fprintf(stderr, "Couldn't open device %s: %s\nTry `sudo` maybe?\n", dev, error);
         return -1;
@@ -94,9 +100,8 @@ int main(int argc, char *argv[]) {
     // netmask  : as the name say
     // return   : -1 for failure, others for success
     struct bpf_program fp;
-    char filter_exp[] = "tcp and port https";
     fprintf(stdout, "Compiling filter %s\n", filter_exp);
-    if (pcap_compile(handle, &fp, filter_exp, 0, net) == FAILURE) {
+    if (pcap_compile(handle, &fp, filter_exp, IS_COMPILE_OPTIMIZE, net) == FAILURE) {
         fprintf(stderr, "Couldn't parse filter %s: %s\n", filter_exp, pcap_geterr(handle));
         return -1;
     }
