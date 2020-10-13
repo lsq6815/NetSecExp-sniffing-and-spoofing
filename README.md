@@ -35,3 +35,27 @@ Berkeley套接字定义了一组转换函数，用于无符号16和32bit整数�
 因为x86是Little-Endian，所以在抓包时要进行处理：
 1. 用转换函数`#include <arpa/inet.h>`
 2. 在定义结构体时定义为`u_char`数组，单字节没有读取问题，然后注意整个数组的读取顺序
+
+## 抓包流程
+1. 初始化网络接口`Network Interface`
+2. 设定`Fliter`
+3. 抓包
+4. 包处理
+5. 关闭网络接口
+6. 结束抓包
+
+## `pcap_lookupdev is deprecated`
+两个reference都使用`pcap_lookupdev`但是，它已经过时。
+
+我们可以使用`pcap_findalldev`来代替
+```c
+pcap_if_t *devices, *temp;
+int pcap_findalldev(pcap_if_t **devices, char *errbuf);
+for (temp = devices; temp != NULL; temp = temp->next) 
+    printf("Found Device %s\n", temp->name);
+    
+char *device = devices->name // 使用默认interface
+```
+- 参数1：指向pcap_if_t 数组的指针的地址，实际返回一个链表头
+- 参数2：错误信息
+- 返回值：-1代表失败， 其他组代表成功
