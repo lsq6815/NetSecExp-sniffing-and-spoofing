@@ -47,10 +47,17 @@ Berkeley套接字定义了一组转换函数，用于无符号16和32bit整数�
 ## `pcap_lookupdev is deprecated`
 两个reference都使用`pcap_lookupdev`但是，它已经过时。
 
-我们可以使用`pcap_findalldev`来代替
+我们可以使用`pcap_findalldev`来代替，函数原型如下：
+```c
+int pcap_findalldev(pcap_if_t **devices, char *errbuf);
+```
+一般使用流程
 ```c
 pcap_if_t *devices, *temp;
-int pcap_findalldev(pcap_if_t **devices, char *errbuf);
+if (pcap_findalldev(&devices, errbuf) == -1) {
+    puts(errbuf);
+    return -1;
+}
 for (temp = devices; temp != NULL; temp = temp->next) 
     printf("Found Device %s\n", temp->name);
     
@@ -58,4 +65,4 @@ char *device = devices->name // 使用默认interface
 ```
 - 参数1：指向pcap_if_t 数组的指针的地址，实际返回一个链表头
 - 参数2：错误信息
-- 返回值：-1代表失败， 其他组代表成功
+- 返回值：-1代表失败， 其他则代表成功
