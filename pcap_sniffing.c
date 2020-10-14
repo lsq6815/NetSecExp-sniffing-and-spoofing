@@ -18,7 +18,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/socket.h>
 #include <sys/types.h>
+#include <ctype.h>
 /*
  * User defined library
  */
@@ -29,12 +31,16 @@
 const int FAILURE = -1;       // pcap function return -1 when fail
 char error[PCAP_ERRBUF_SIZE]; // most pcap function take errbuf as argument. When error ouccr, return info with errbuf
 
+/* Function Definition */
+void processPacket(u_char * args, const struct pcap_pkthdr *pkthdr, const u_char * packet);
+
 int main(int argc, char *argv[]) {
     /* config here */
     const u_int TIME_OUT_MS       = 1000; // read time out by milliseconds
     const int IS_PROMISC_MODE     = 1;
-    const char *filter_exp        = "tcp and port https"; // the filter to compile
+    const char *filter_exp        = "tcp"; // the filter to compile
     const int IS_COMPILE_OPTIMIZE = 0; // whether optimize the filter been compiled
+    const int PACK_TO_CAP         = 20;
 
 
     /* 1. Fetch devices info */
@@ -114,13 +120,6 @@ int main(int argc, char *argv[]) {
     }
 
     /* 7. Capture packet */
-    struct pcap_pkthdr header; // the header that pcap give
-    const u_char *packet;      // the pcaket in real
-    packet = pcap_next(handle, &header);
-
-    /* print its length */
-    fprintf(stdout, "Jacked a packet with length of [%d], Captured length of [%d]\n", header.len, header.caplen);
-    
     /* use pcap_loop */
     // int pcap_loop(pcap_t *p, int cnt, pcap_handler callback, u_char *user);
     // p        : handle
@@ -135,6 +134,18 @@ int main(int argc, char *argv[]) {
     // args   : corresponds to user
     // header : pcap header
     // pcaket : pointer point to the actual packet
+    pcap_loop(handle, PACK_TO_CAP, processPacket, NULL);
+
+    /* 7. Close the session */
+    pcap_close(handle);
+    return 0;
+}
+
+void processPacket(u_char * args, const struct pcap_pkthdr *pkthdr, const u_char * packet) {
+    static int counter = 0; // count pcaket number
+    fprintf(stdout, "Packet Captured %d\n", ++counter);
+    fprintf(stdout, "Capture length %d\n", pkthdr->caplen);
+
     const int SIZE_ETHERNET = 14; // ethernet's frame size is always exactly 14B
     u_int size_ip;                // size of ip packet
     u_int size_tcp;               // size of tcp segment
@@ -156,7 +167,7 @@ int main(int argc, char *argv[]) {
     size_ip = IP_HL(ip) * 4;
     if (size_ip < 20) {
         fprintf(stderr, "Invalid IP header length: %u bytes\n", size_ip);
-        return -1;
+        return;
     }
     fprintf(stdout, "IP src: %s\n", ip_addr_to_str(ip->ip_src));
     fprintf(stdout, "IP dst: %s\n", ip_addr_to_str(ip->ip_dst));
@@ -172,12 +183,20 @@ int main(int argc, char *argv[]) {
     fprintf(stdout, "TCP Header size: %u\n", size_tcp);
     /* payload */
     payload = (u_char *)(packet + SIZE_ETHERNET + size_ip + size_tcp);
-    size_payload = header.caplen - 14 - size_ip - size_tcp;
+    size_payload = pkthdr->caplen - SIZE_ETHERNET - size_ip - size_tcp;
     fprintf(stdout, "Payload size: %u\n", size_payload);
     if (size_payload > 0) {
-        fprintf(stdout, "Content:\n%s\n", payload_to_ascii(payload, size_payload));
+        for (int i = 0; i < (pkthdr->len); i++) {
+            if (isprint(packet[i])) {
+                printf("%c ", packet[i]);
+            } else {
+                printf(". ");
+            }
+    
+            if ((i % 32 == 0 && i != 0) || i == (pkthdr->len) - 1) 
+                printf("\n");
+        }
     }
-    /* 7. Close the session */
-    pcap_close(handle);
-    return 0;
+    fprintf(stdout, "\n\n");
 }
+

@@ -7,6 +7,7 @@
 #include <sys/types.h>
 
 #define MAX_BYTE_TO_CAP 2048
+#define COL_PER_ROW 32
 
 /* Callback function to process packet captured */
 void processPacket(u_char *arg, const struct pcap_pkthdr* pkthdr, const u_char *packet) {
@@ -23,7 +24,7 @@ void processPacket(u_char *arg, const struct pcap_pkthdr* pkthdr, const u_char *
             printf(". ");
         }
 
-        if ((i % 16 == 0 && i != 0) || i == (pkthdr->len) - 1) 
+        if ((i % COL_PER_ROW == 0 && i != 0) || i == (pkthdr->len) - 1) 
             printf("\n");
     }
     return;
@@ -44,6 +45,7 @@ int main(int argc, char *argv[]) {
     device = devices->name;
     descr = pcap_open_live(device, MAX_BYTE_TO_CAP, 1, 512, errbuf);
     pcap_loop(descr, 10, processPacket, (u_char *)&count);
+    printf("%d packet(s) captured\n", count);
 }
 
 
