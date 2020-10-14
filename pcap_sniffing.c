@@ -210,10 +210,20 @@ void processTCPSegment(u_char * args, u_int caplen, const u_char * packet) {
         fprintf(stderr, "Invalid TCP header length: %u bytes\n", size_tcp);
         return;
     }
-    fprintf(stdout, "%s -> %s [size: %u B]\n",
+    fprintf(stdout, "%s -> %s [size: %u B; SEQ: %u; ACK %u; FLAG: %c%c%c%c%c%c%c%c]\n",
         tcpPortToStr(tcp->th_sport),
         tcpPortToStr(tcp->th_dport),
-        size_tcp
+        size_tcp,
+        ntohl(tcp->th_seq),
+        ntohl(tcp->th_ack),
+        tcp->th_flags & TH_FIN ? 'F' : '.',
+        tcp->th_flags & TH_SYN ? 'S' : '.',
+        tcp->th_flags & TH_RST ? 'R' : '.',
+        tcp->th_flags & TH_PUSH ? 'P' : '.',
+        tcp->th_flags & TH_ACK ? 'A' : '.',
+        tcp->th_flags & TH_UGR ? 'U' : '.',
+        tcp->th_flags & TH_ECE ? 'E' : '.',
+        tcp->th_flags & TH_CWR ? 'C' : '.'
     );
 
     /* payload */

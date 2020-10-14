@@ -63,13 +63,13 @@ typedef struct sniff_ip {
 /* TCP header */
 typedef u_int tcp_seq;
 typedef struct sniff_tcp {
-        u_short th_sport; // source port            : 2B
-        u_short th_dport; // destination port       : 2B
-        tcp_seq th_seq;   // sequence number        : 4B
-        tcp_seq th_ack;   // acknowledgement number : 4B
-        u_char th_offx2;  // data offset, rsvd      : 1B
+    u_short th_sport; // source port            : 2B
+    u_short th_dport; // destination port       : 2B
+    tcp_seq th_seq;   // sequence number        : 4B
+    tcp_seq th_ack;   // acknowledgement number : 4B
+    u_char th_offx2;  // data offset, rsvd      : 1B
 #define TH_OFF(th) ( ( (th)->th_offx2 & 0xf0 ) >> 4 )
-        u_char th_flags;  //                        : 1B
+    u_char th_flags;  //                        : 1B
 #define TH_FIN  0x01
 #define TH_SYN  0x02
 #define TH_RST  0x04
