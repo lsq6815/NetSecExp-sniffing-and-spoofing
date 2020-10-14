@@ -33,7 +33,7 @@ c_str ipv4AddrToStr(struct in_addr addr) {
     return strdup(inet_ntoa(addr));
 }
 
-const char *ipv4Type(u_int protocol) {
+const char *ipv4Type(u_char protocol) {
     switch (protocol) {
         case IPPROTO_ICMP : return "ICMP";
         case IPPROTO_IGMP : return "IGMP";

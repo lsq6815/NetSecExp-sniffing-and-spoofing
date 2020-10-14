@@ -14,7 +14,7 @@ const char *etherType(u_short ether_type);
 /* Convert raw ip data to number-and-dot notation */
 c_str ipv4AddrToStr(struct in_addr addr);
 /* Return protocol type */
-const char *ipv4Type(u_int protocol);
+const char *ipv4Type(u_char protocol);
 
 /* Convert raw tcp data to string */
 c_str tcpPortToStr(u_short port);

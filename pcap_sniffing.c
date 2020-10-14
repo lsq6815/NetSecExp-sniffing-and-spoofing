@@ -22,6 +22,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <ctype.h>
+#include <sys/wait.h>
 /*
  * User defined library
  */
@@ -33,8 +34,14 @@ const int FAILURE = -1;       // pcap function return -1 when fail
 char error[PCAP_ERRBUF_SIZE]; // most pcap function take errbuf as argument. When error ouccr, return info with errbuf
 
 /* Function Definition */
-/* function for pcap_loop callback */
-void processPacket(u_char * args, const struct pcap_pkthdr *pkthdr, const u_char * packet);
+/* Callback processing Ether */
+void processEtherFrame(u_char * args, const struct pcap_pkthdr *pkthdr, const u_char * packet);
+/* Callback processing IP */
+void processIPPacket(u_char * args, u_int caplen, const u_char * packet);
+/* Callback processing ARP */
+void processARPPacket(u_char * args, u_int caplen, const u_char * packet);
+/* Callback processing TCP */
+void processTCPSegment(u_char * args, u_int caplen, const u_char * packet);
 /* Print Devices Info */
 void printDevicesInfo(const pcap_if_t *devices);
 
@@ -45,7 +52,7 @@ int main(int argc, char *argv[]) {
     const u_int TIME_OUT_MS       = 1000;   // how much time, by millisecond,  should driver quit core mode to user mode, for data transfer
     const int IS_PROMISC_MODE     = 1;      // whether capture the packet that not sent/received by host
     /* Filter config */
-    const char *filter_exp        = "tcp"; // the filter to compile
+    const char *filter_exp        = ""; // the filter to compile
     const int IS_COMPILE_OPTIMIZE = 0;     // whether optimize the filter been compiled
     /* Capture loop conifg */
     const int PACK_TO_CAP         = 20;    // How much packet to capture
@@ -141,40 +148,42 @@ int main(int argc, char *argv[]) {
      * pcaket : pointer point to the actual packet
      */
     u_int counter = 0;
-    pcap_loop(handle, PACK_TO_CAP, processPacket, (u_char *)&counter);
+    pcap_loop(handle, PACK_TO_CAP, processEtherFrame, (u_char *)&counter);
+    fprintf(stdout, "Capture %d/%d\n", counter, PACK_TO_CAP);
 
     /* 7. Close the session */
     pcap_close(handle);
     return 0;
 }
 
-void processPacket(u_char * args, const struct pcap_pkthdr *pkthdr, const u_char * packet) {
+void processEtherFrame(u_char * args, const struct pcap_pkthdr *pkthdr, const u_char * packet) {
     u_int *counter = (u_int *)args;
     fprintf(stdout, "Packet: %u\n", ++(*counter));
-    fprintf(stdout, "Capture %d B Packet %d B\n", pkthdr->caplen, pkthdr->len);
+    fprintf(stdout, "Capture: %d B Packet: %d B\n", pkthdr->caplen, pkthdr->len);
 
-    const u_int SIZE_ETHERNET = 14; // ethernet's frame size is always exactly 14B
-    u_int size_ip;                // size of ip packet
-    u_int size_tcp;               // size of tcp segment
-    u_int size_payload;           // size of payload
+    const u_int SIZE_ETHERNET = 14;                                  // ethernet's frame size is always exactly 14B
+    const sniff_ethernet_t *ethernet = (sniff_ethernet_t *)(packet); // the ethernet header
+    const u_char *payload = packet + SIZE_ETHERNET;                  // packet payload
 
-    const struct sniff_ethernet *ethernet; // the ethernet header
-    const struct sniff_ip *ip;             // the ip header
-    const struct sniff_tcp *tcp;           // the tcp header
-    const u_char *payload;                 // packet payload
-    /* magical typecasting */
     /* ethernet header */
-    ethernet = (struct sniff_ethernet *)(packet);
-    fprintf(stdout, "%s -> %s [size %u B; protocol: %s]\n",
+    fprintf(stdout, "%s -> %s [size: %u B; protocol: %s]\n",
         etherHostToStr(ethernet->ether_shost),
         etherHostToStr(ethernet->ether_dhost),
         SIZE_ETHERNET,
         etherType(ethernet->ether_type)    
     );
+    switch (ntohs(ethernet->ether_type)) {
+        case ETHER_TYPE_IP4:
+            processIPPacket(NULL, pkthdr->caplen - SIZE_ETHERNET, payload); return;
+        default:
+            fprintf(stdout, "\n\n"); return;
+    }
+}
 
-    /* ip header */
-    ip      = (struct sniff_ip *)(packet + SIZE_ETHERNET);
-    size_ip = IP_HL(ip) * 4;
+void processIPPacket(u_char * args, u_int caplen, const u_char * packet) {
+    const sniff_ip_t *ip  = (sniff_ip_t *)packet; // the ip header
+    u_int size_ip         = IP_HL(ip) * 4;        // size of ip packet
+    const u_char *payload = packet + size_ip;     // size of payload
     if (size_ip < 20) {
         fprintf(stderr, "Invalid IP header length: %u bytes\n", size_ip);
         return;
@@ -185,37 +194,49 @@ void processPacket(u_char * args, const struct pcap_pkthdr *pkthdr, const u_char
         size_ip,
         ipv4Type(ip->ip_p)
     );
+    switch (ip->ip_p) {
+        case IPPROTO_TCP:
+            processTCPSegment(NULL, caplen - size_ip, payload); return;
+        default:
+            fprintf(stdout, "\n\n"); return;
+    }
+}
 
+void processTCPSegment(u_char * args, u_int caplen, const u_char * packet) {
+    const sniff_tcp_t *tcp = (sniff_tcp_t *)(packet); // the tcp header
+    u_int size_tcp         = TH_OFF(tcp) * 4;         // size of tcp segment
     /* tcp header */
-    tcp      = (struct sniff_tcp *)(packet + SIZE_ETHERNET + size_ip);
-    size_tcp = TH_OFF(tcp) * 4;
     if (size_tcp < 20) {
-        fprintf(stderr, "Invalid IP header length: %u bytes\n", size_ip);
+        fprintf(stderr, "Invalid TCP header length: %u bytes\n", size_tcp);
         return;
     }
-    fprintf(stdout, "%s -> %s [%u B]\n",
+    fprintf(stdout, "%s -> %s [size: %u B]\n",
         tcpPortToStr(tcp->th_sport),
         tcpPortToStr(tcp->th_dport),
         size_tcp
     );
 
     /* payload */
-    payload = (u_char *)(packet + SIZE_ETHERNET + size_ip + size_tcp);
-    size_payload = pkthdr->caplen - SIZE_ETHERNET - size_ip - size_tcp;
+    u_char *payload    = (u_char *)(packet + size_tcp);
+    u_int size_payload = caplen  - size_tcp;
     if (size_payload > 0) {
         fprintf(stdout, "Payload %uB\n", size_payload);
-        for (int i = 0; i < (pkthdr->len); i++) {
+        for (int i = 0; i < caplen; i++) {
             if (isprint(packet[i])) {
                 printf("%c ", packet[i]);
             } else {
                 printf(". ");
             }
     
-            if ((i % 32 == 0 && i != 0) || i == (pkthdr->len) - 1) 
+            if ((i % 32 == 0 && i != 0) || i == (caplen) - 1) 
                 printf("\n");
         }
     }
     fprintf(stdout, "\n\n");
+}
+
+void processARPPacket(u_char * args, u_int caplen, const u_char * packet) {
+    return;
 }
 
 void printDevicesInfo(const pcap_if_t *devices) {
@@ -229,4 +250,3 @@ void printDevicesInfo(const pcap_if_t *devices) {
         );
     }
 }
-

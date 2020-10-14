@@ -1,11 +1,13 @@
 #ifndef TCP_FRAME_STRUCT_H
 #define TCP_FRAME_STRUCT_H
+#include <bits/stdint-uintn.h>
 #include <netinet/in.h>
 #include <pcap.h>
 #include <sys/types.h>
-/* Ethernet header */
 #pragma pcak()
-struct sniff_ethernet {
+
+/* Ethernet header */
+typedef struct sniff_ethernet {
 // if you define out of struct then it wouldn't loaded by #include
 #define ETHER_ADDR_LEN 6
     // If you dont use char array, then you have to deal with NBO
@@ -22,10 +24,25 @@ struct sniff_ethernet {
 #define  ETHER_TYPE_ETHER_TALK 0x809B
 #define         ETHER_TYPE_PPP 0x880B
 #define        ETHER_TYPE_SNMP 0x814C
-};
+} sniff_ethernet_t;
+
+/* ARP header */
+typedef struct sniff_arp {
+#define ARP_REQUEST 1
+#define ARP_REPLY   2
+    u_int16_t h_type;                        // hardware type
+    u_int16_t p_type;                        // protocol type
+    u_char h_len;                            // hardware address length
+    u_char p_len;                            // protocol address length
+    u_int16_t oper;                          // operation code
+    u_char sender_hard_addr[ETHER_ADDR_LEN]; // sender hardware address
+    struct in_addr  sender_ip_addr;          // sender ip address
+    u_char target_hard_addr[ETHER_ADDR_LEN]; // target hardware address
+    struct in_addr  target_ip_addr;          // target ip address
+} sniff_arp_t;
 
 /* IP header */
-struct sniff_ip {
+typedef struct sniff_ip {
         u_char ip_vhl;                 // version << 4 | header length >> 2 : 1B
         u_char ip_tos;                 // type of service                   : 1B
         u_short ip_len;                // total length                      : 2B
@@ -39,13 +56,13 @@ struct sniff_ip {
         u_char ip_p;                   // protocol                          : 1B
         u_short ip_usm;                // checksum                          : 2B
         struct in_addr ip_src, ip_dst; // source and dest address           : 4B : 4B
-};
+} sniff_ip_t;
 #define IP_HL(ip)  ( ( (ip)->ip_vhl) & 0x0f )
 #define IP_V(ip)   ( ( (ip)->ip_vhl) >> 4 )
 
 /* TCP header */
 typedef u_int tcp_seq;
-struct sniff_tcp {
+typedef struct sniff_tcp {
         u_short th_sport; // source port            : 2B
         u_short th_dport; // destination port       : 2B
         tcp_seq th_seq;   // sequence number        : 4B
@@ -65,5 +82,5 @@ struct sniff_tcp {
         u_short th_win;   // window                 : 2B
         u_short th_sum;   // check sum              : 2B
         u_short urp;      // urgent pointer         : 2B
-};
+} sniff_tcp_t;
 #endif
