@@ -149,11 +149,11 @@ int main(int argc, char *argv[]) {
 }
 
 void processPacket(u_char * args, const struct pcap_pkthdr *pkthdr, const u_char * packet) {
-    u_int *counter = (int *)args;
+    u_int *counter = (u_int *)args;
     fprintf(stdout, "Packet: %u\n", ++(*counter));
     fprintf(stdout, "Capture %d B Packet %d B\n", pkthdr->caplen, pkthdr->len);
 
-    const int SIZE_ETHERNET = 14; // ethernet's frame size is always exactly 14B
+    const u_int SIZE_ETHERNET = 14; // ethernet's frame size is always exactly 14B
     u_int size_ip;                // size of ip packet
     u_int size_tcp;               // size of tcp segment
     u_int size_payload;           // size of payload
@@ -165,9 +165,11 @@ void processPacket(u_char * args, const struct pcap_pkthdr *pkthdr, const u_char
     /* magical typecasting */
     /* ethernet header */
     ethernet = (struct sniff_ethernet *)(packet);
-    fprintf(stdout, "%s -> %s\n",
-        ether_host_to_str(ethernet->ether_shost),
-        ether_host_to_str(ethernet->ether_dhost)
+    fprintf(stdout, "%s -> %s [size %u B; protocol: %s]\n",
+        etherHostToStr(ethernet->ether_shost),
+        etherHostToStr(ethernet->ether_dhost),
+        SIZE_ETHERNET,
+        etherType(ethernet->ether_type)    
     );
 
     /* ip header */
@@ -177,10 +179,11 @@ void processPacket(u_char * args, const struct pcap_pkthdr *pkthdr, const u_char
         fprintf(stderr, "Invalid IP header length: %u bytes\n", size_ip);
         return;
     }
-    fprintf(stdout, "%s -> %s [size: %u B]\n",
-        ip_addr_to_str(ip->ip_src),
-        ip_addr_to_str(ip->ip_dst),
-        size_ip
+    fprintf(stdout, "%s -> %s [size: %u B; protocol: %s]\n",
+        ipv4AddrToStr(ip->ip_src),
+        ipv4AddrToStr(ip->ip_dst),
+        size_ip,
+        ipv4Type(ip->ip_p)
     );
 
     /* tcp header */
@@ -191,8 +194,8 @@ void processPacket(u_char * args, const struct pcap_pkthdr *pkthdr, const u_char
         return;
     }
     fprintf(stdout, "%s -> %s [%u B]\n",
-        tcp_port_to_str(tcp->th_sport),
-        tcp_port_to_str(tcp->th_dport),
+        tcpPortToStr(tcp->th_sport),
+        tcpPortToStr(tcp->th_dport),
         size_tcp
     );
 
@@ -226,3 +229,4 @@ void printDevicesInfo(const pcap_if_t *devices) {
         );
     }
 }
+

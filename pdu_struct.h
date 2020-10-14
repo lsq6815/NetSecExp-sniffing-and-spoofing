@@ -15,6 +15,13 @@ struct sniff_ethernet {
     u_char ether_dhost[ETHER_ADDR_LEN]; // Destination host address : 6B
     u_char ether_shost[ETHER_ADDR_LEN]; // Source host address      : 6B
     u_short ether_type;                 // IP? ARP? RARP? etc       : 2B
+#define         ETHER_TYPE_IP4 0x0800
+#define         ETHER_TYPE_IP6 0x86DD
+#define         ETHER_TYPE_ARP 0x0806
+#define        ETHER_TYPE_RARP 0x8035
+#define  ETHER_TYPE_ETHER_TALK 0x809B
+#define         ETHER_TYPE_PPP 0x880B
+#define        ETHER_TYPE_SNMP 0x814C
 };
 
 /* IP header */

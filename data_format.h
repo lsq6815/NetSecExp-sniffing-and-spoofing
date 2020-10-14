@@ -7,11 +7,17 @@
 typedef char * c_str;
 #define COL_PRE_ROW (16)
 /* Convert raw ether data of PDU to human readable format */
-c_str ether_host_to_str(const u_char host[]);
+c_str etherHostToStr(const u_char host[]);
+/* Return ether type */
+const char *etherType(u_short ether_type);
+
 /* Convert raw ip data to number-and-dot notation */
-c_str ip_addr_to_str(struct in_addr addr);
+c_str ipv4AddrToStr(struct in_addr addr);
+/* Return protocol type */
+const char *ipv4Type(u_int protocol);
+
 /* Convert raw tcp data to string */
-c_str tcp_port_to_str(u_short port);
+c_str tcpPortToStr(u_short port);
 /* Convert payload to ASCII */
-c_str payload_to_ascii(const u_char * payload, u_int pd_len);
+c_str payloadToAscii(const u_char * payload, u_int pd_len);
 #endif
