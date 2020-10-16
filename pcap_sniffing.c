@@ -54,11 +54,18 @@ int main(int argc, char *argv[]) {
     const u_int TIME_OUT_MS       = 1000;   // how much time, by millisecond,  should driver quit core mode to user mode, for data transfer
     const int IS_PROMISC_MODE     = 1;      // whether capture the packet that not sent/received by host
     /* Filter config */
-    const char *filter_exp        = ""; // the filter to compile
-    const int IS_COMPILE_OPTIMIZE = 0;     // whether optimize the filter been compiled
+    char *filter_exp              = "";     // the filter to compile, default to capture anything
+    const int IS_COMPILE_OPTIMIZE = 0;      // whether optimize the filter been compiled
     /* Capture loop conifg */
-    const int PACK_TO_CAP         = 20;    // How much packet to capture
+    const int PACK_TO_CAP         = 20;     // How much packet to capture
 
+    /* Command line argument */
+    if (argc >= 2) {
+        fprintf(stdout, "Use filter: %s\n", argv[1]);
+        filter_exp = argv[1];
+    } else {
+        fprintf(stdout, "Use default filter: %s\n", filter_exp);
+    }
 
     /* 1. Fetch devices info and select one */
     pcap_if_t *devices, *temp;
@@ -150,6 +157,7 @@ int main(int argc, char *argv[]) {
      * pcaket : pointer point to the actual packet
      */
     u_int counter = 0;
+    fprintf(stdout, "Capturing now:\n");
     pcap_loop(handle, PACK_TO_CAP, processEtherFrame, (u_char *)&counter);
     fprintf(stdout, "Capture %d/%d\n", counter, PACK_TO_CAP);
 
@@ -161,9 +169,9 @@ int main(int argc, char *argv[]) {
 void processEtherFrame(u_char * args, const struct pcap_pkthdr *pkthdr, const u_char * packet) {
     u_int *counter = (u_int *)args;
     fprintf(stdout, "Packet: %u\n", ++(*counter));
-    fprintf(stdout, "Capture: %d B Packet: %d B\n", pkthdr->caplen, pkthdr->len);
+    fprintf(stdout, "Capture: %d B; Packet: %d B\n", pkthdr->caplen, pkthdr->len);
 
-    const sniff_ethernet_t *ethernet = (sniff_ethernet_t *)(packet);   // the ethernet header
+    const sniff_ethernet_t *ethernet = (sniff_ethernet_t *)(packet);          // the ethernet header
     const u_char *payload            = packet + SIZE_ETHERNET_HEADER;         // packet payload
     const u_int size_payload         = pkthdr->caplen - SIZE_ETHERNET_HEADER; // size of payload
 
@@ -174,6 +182,8 @@ void processEtherFrame(u_char * args, const struct pcap_pkthdr *pkthdr, const u_
         SIZE_ETHERNET_HEADER,
         etherType(ethernet->ether_type)    
     );
+
+    /* next layer */
     switch (ntohs(ethernet->ether_type)) {
         case ETHER_TYPE_IP4:
             processIPPacket(NULL, size_payload, payload); return;
@@ -184,15 +194,16 @@ void processEtherFrame(u_char * args, const struct pcap_pkthdr *pkthdr, const u_
 
 void processIPPacket(u_char * args, u_int caplen, const u_char * packet) {
     const sniff_ip_t *ip     = (sniff_ip_t *)packet; // the ip header
-    u_int size_ip            = IP_HL(ip) * 4;        // size of ip packet
+    const u_int size_ip      = IP_HL(ip) * 4;        // size of ip packet
     const u_char *payload    = packet + size_ip;     // payload
     const u_int size_payload = caplen - size_ip;     // size of payload
 
-    /* Size check */
+    /* size check */
     if (size_ip < 20) {
         fprintf(stderr, "Invalid IP header length: %u bytes\n", size_ip);
         return;
     }
+
     /* IP header */
     fprintf(stdout, "%s -> %s [size: %u B; protocol: %s]\n",
         ipv4AddrToStr(ip->ip_src),
@@ -200,7 +211,8 @@ void processIPPacket(u_char * args, u_int caplen, const u_char * packet) {
         size_ip,
         ipv4Type(ip->ip_p)
     );
-    /* To next layer */
+
+    /* next layer */
     switch (ip->ip_p) {
         case IPPROTO_TCP:
             processTCPSegment(NULL, size_payload, payload); return;
@@ -214,13 +226,16 @@ void processIPPacket(u_char * args, u_int caplen, const u_char * packet) {
 void processTCPSegment(u_char * args, u_int caplen, const u_char * packet) {
     const sniff_tcp_t *tcp   = (sniff_tcp_t *)(packet);       // the tcp header
     const u_int size_tcp     = TH_OFF(tcp) * 4;               // size of tcp segment
-    const u_char *payload    = (u_char *)(packet + size_tcp); // payload
+    const u_char *payload    = packet + size_tcp;             // payload
     const u_int size_payload = caplen  - size_tcp;            // size of payload
+
+    /* size check */
     if (size_tcp < 20) {
         fprintf(stderr, "Invalid TCP header length: %u bytes\n", size_tcp);
         return;
     }
-    /* tcp header */
+
+    /* TCP header */
     fprintf(stdout, "%s -> %s [size: %u B; SEQ: %u; ACK %u; FLAG: %c%c%c%c%c%c%c%c]\n",
         tcpPortToStr(tcp->th_sport),
         tcpPortToStr(tcp->th_dport),
@@ -250,10 +265,13 @@ void processICMPInfo(u_char *args, u_int caplen, const u_char * packet) {
     const sniff_icmp_t *icmp = (sniff_icmp_t *)(packet);   // icmp
     const u_char *payload    = packet + SIZE_ICMP_HEADER;  // payload
     const u_int size_payload = caplen  - SIZE_ICMP_HEADER; // size of payload
+
     /* ICMP header */
     fprintf(stdout, "[type: %s]\n", 
         icmpType(icmp->icmp_type)
     );
+
+    /* payload */
     if (size_payload > 0) payloadToAscii(payload, size_payload);
     fprintf(stdout, "\n\n");
 }

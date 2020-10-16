@@ -51,15 +51,15 @@ const c_str ipv4Type(u_char protocol) {
 const c_str icmpType(u_char type) {
     switch (type) {
         case ICMP_ECHOREPLY:
-            return "echo reply";
+            return "ECHO REPLY";
         case ICMP_ECHO:
-            return "echo request";
+            return "ECHO REQUEST";
         case ICMP_TIMXCEED:
-            return "time exceeded";
+            return "TIME EXCEEDED";
         case ICMP_DEST_UNREACH:
-            return "dest unreachable";
+            return "DEST UNREACHABLE";
         default:
-            return "unknown type";
+            return "UNKNOWN TYPE";
     };
 }
 
@@ -78,7 +78,7 @@ void payloadToAscii(const u_char * payload, u_int size_payload) {
             printf(". ");
         }
 
-        if ((i % 32 == 0 && i != 0) || i == (size_payload) - 1) 
+        if ((i % COL_PRE_ROW == 0 && i != 0) || i == (size_payload) - 1) 
             printf("\n");
     }
 }

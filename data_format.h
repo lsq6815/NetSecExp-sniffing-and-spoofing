@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include "pdu_struct.h"
 typedef char * c_str;
-#define COL_PRE_ROW (16)
+#define COL_PRE_ROW (32)
 /* Convert raw ether data of PDU to human readable format */
 c_str etherHostToStr(const u_char host[]);
 /* Return ether type */
@@ -23,4 +23,5 @@ const c_str icmpType(u_char type);
 c_str tcpPortToStr(u_short port);
 /* Convert payload to ASCII */
 void payloadToAscii(const u_char * payload, u_int pd_len);
+
 #endif
