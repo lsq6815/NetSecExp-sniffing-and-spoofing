@@ -10,6 +10,7 @@
 typedef struct sniff_ethernet {
 // if you define out of struct then it wouldn't loaded by #include
 #define ETHER_ADDR_LEN 6
+#define SIZE_ETHERNET_HEADER 14
     // If you dont use char array, then you have to deal with NBO
     // But with char array, they keep big-endian. if you use a int48 
     // to store it, then they turn into little-endian. If you process with
@@ -59,6 +60,14 @@ typedef struct sniff_ip {
 } sniff_ip_t;
 #define IP_HL(ip)  ( ( (ip)->ip_vhl) & 0x0f )
 #define IP_V(ip)   ( ( (ip)->ip_vhl) >> 4 )
+
+/* ICMP header */
+typedef struct sniff_icmp {
+#define SIZE_ICMP_HEADER 4
+    u_int8_t icmp_type;
+    u_int8_t icmp_code;
+    u_int16_t icmp_checksum;
+} sniff_icmp_t;
 
 /* TCP header */
 typedef u_int tcp_seq;

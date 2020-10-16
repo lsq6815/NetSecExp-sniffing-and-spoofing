@@ -9,15 +9,18 @@ typedef char * c_str;
 /* Convert raw ether data of PDU to human readable format */
 c_str etherHostToStr(const u_char host[]);
 /* Return ether type */
-const char *etherType(u_short ether_type);
+const c_str etherType(u_short ether_type);
 
 /* Convert raw ip data to number-and-dot notation */
 c_str ipv4AddrToStr(struct in_addr addr);
 /* Return protocol type */
-const char *ipv4Type(u_char protocol);
+const c_str ipv4Type(u_char protocol);
+
+/* Return ICMP type */
+const c_str icmpType(u_char type);
 
 /* Convert raw tcp data to string */
 c_str tcpPortToStr(u_short port);
 /* Convert payload to ASCII */
-c_str payloadToAscii(const u_char * payload, u_int pd_len);
+void payloadToAscii(const u_char * payload, u_int pd_len);
 #endif

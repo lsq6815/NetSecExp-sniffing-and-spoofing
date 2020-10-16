@@ -1,10 +1,12 @@
 #include "data_format.h"
 #include "pdu_struct.h"
+#include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
 #include <netinet/in.h>
+#include <netinet/ip_icmp.h>
 #include <arpa/inet.h>
 
 c_str etherHostToStr(const u_char *host) {
@@ -16,7 +18,7 @@ c_str etherHostToStr(const u_char *host) {
     return result;
 }
 
-const char *etherType(u_short ether_type) {
+const c_str etherType(u_short ether_type) {
     switch (ntohs(ether_type)) {
         case ETHER_TYPE_IP4        : return "IPv4";
         case ETHER_TYPE_IP6        : return "IPv6";
@@ -33,7 +35,7 @@ c_str ipv4AddrToStr(struct in_addr addr) {
     return strdup(inet_ntoa(addr));
 }
 
-const char *ipv4Type(u_char protocol) {
+const c_str ipv4Type(u_char protocol) {
     switch (protocol) {
         case IPPROTO_ICMP : return "ICMP";
         case IPPROTO_IGMP : return "IGMP";
@@ -46,22 +48,37 @@ const char *ipv4Type(u_char protocol) {
 }
 
 
+const c_str icmpType(u_char type) {
+    switch (type) {
+        case ICMP_ECHOREPLY:
+            return "echo reply";
+        case ICMP_ECHO:
+            return "echo request";
+        case ICMP_TIMXCEED:
+            return "time exceeded";
+        case ICMP_DEST_UNREACH:
+            return "dest unreachable";
+        default:
+            return "unknown type";
+    };
+}
+
 c_str tcpPortToStr(u_short port) {
     c_str result = (c_str)calloc(5 + 1, sizeof(char));
     sprintf(result, "%u", ntohs(port));
     return result;
 }
 
-c_str payloadToAscii(const u_char * payload, u_int pd_len) {
-   int round = pd_len / COL_PRE_ROW;
-   int ret   = pd_len % COL_PRE_ROW;
-   int index = 0;
-   c_str result = (c_str)calloc(pd_len + round + 1, sizeof(char)); // round stands for \n
-   for (int i = 0; i < round; i++) {
-      for (int j = 0; j < COL_PRE_ROW; j++) {
-          result[index++] = payload[i * COL_PRE_ROW + j];
-      }
-      result[index++] = '\n';
-   }
-   return result;
+void payloadToAscii(const u_char * payload, u_int size_payload) {
+    fprintf(stdout, "Payload %uB\n", size_payload);
+    for (int i = 0; i < size_payload; i++) {
+        if (isprint(payload[i])) {
+            printf("%c ", payload[i]);
+        } else {
+            printf(". ");
+        }
+
+        if ((i % 32 == 0 && i != 0) || i == (size_payload) - 1) 
+            printf("\n");
+    }
 }
