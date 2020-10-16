@@ -49,10 +49,10 @@ typedef struct sniff_ip {
         u_short ip_len;                // total length                      : 2B
         u_short ip_id;                 // identification                    : 2B
         u_short ip_off;                // fragment offset field             : 2B
-#define IP_RF 0x8000;                  // reserved fragment flag
-#define IP_DF 0x4000;                  // dont fragment flag
-#define IP_MF 0x2000;                  // more for fragment flag
-#define IP_OFFMASK 0x1fff;             // mak for fragment bits
+#define IP_RF 0x8000                   // reserved fragment flag
+#define IP_DF 0x4000                   // dont fragment flag
+#define IP_MF 0x2000                   // more for fragment flag
+#define IP_OFFMASK 0x1fff              // mak for fragment bits
         u_char ip_ttl;                 // time to live                      : 1B
         u_char ip_p;                   // protocol                          : 1B
         u_short ip_usm;                // checksum                          : 2B
