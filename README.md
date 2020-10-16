@@ -13,6 +13,8 @@
 
 [Programming with Libcap - Sniffing the network from our own applicaiton](http://recursos.aldabaknocking.com/libpcapHakin9LuisMartinGarcia.pdf) by Luis Martin Garcia.
 
+[IP SPOOFING with BSD RAW SOCKETS INTERFACE](http://www.enderunix.org/docs/en/rawipspoof/) 实验没有提供spoofing参考，这里找到一个
+
 ## NBO(Network Byte Order)
 对于单一的字节（a byte），大部分处理器以相同的顺序处理位元（bit），因此单字节的存放方法和传输方式一般相同。
 
