@@ -78,6 +78,7 @@ int main(int argc, char *argv[]) {
     const char * const dev = devices->name;
     fprintf(stdout, "Choose default devices: %s\n", dev);
 
+ 
     /* 2. Detect the net and mask of device */
     bpf_u_int32 mask;
     bpf_u_int32 net;
@@ -108,7 +109,7 @@ int main(int argc, char *argv[]) {
         return -1;
     }
     fprintf(stdout, "Open device %s success!\n", dev);
-    
+
     /* 4. Detect the link-layer header type */
     // LINKTYPE_ETHERNET = 1 = DLT_EN10MB
     if (pcap_datalink(handle) != DLT_EN10MB) {
@@ -161,7 +162,7 @@ int main(int argc, char *argv[]) {
     pcap_loop(handle, PACK_TO_CAP, processEtherFrame, (u_char *)&counter);
     fprintf(stdout, "Capture %d/%d\n", counter, PACK_TO_CAP);
 
-    /* 7. Close the session */
+    /* 8. Close the session */
     pcap_close(handle);
     return 0;
 }
