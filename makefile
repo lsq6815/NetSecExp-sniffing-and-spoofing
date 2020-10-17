@@ -5,4 +5,4 @@ pcap_sniffing.o: pcap_sniffing.c data_format.h pdu_struct.h
 data_format.o: data_format.c data_format.h pdu_struct.h
 	gcc -o data_format.o -c data_format.c
 clean:
-	rm *.o sniffing.out .*.swp
+	rm *.o *.out .*.swp

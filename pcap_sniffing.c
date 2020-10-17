@@ -74,7 +74,7 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Error in pcap findalldevs:\n%s\n", error);
         return -1;
     }
-    printDevicesInfo(devices);
+    // printDevicesInfo(devices);
     const char * const dev = devices->name;
     fprintf(stdout, "Choose default devices: %s\n", dev);
 
@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
     }
     fprintf(stdout, "Device %s support Ethernet headers\n", dev);
 
-    /* 5. Complier filter
+    /* 5. Complie filter
      * see the grammar of filter in `$man pcap-filter -s 7`
      * int pcap_compile(pcap_t *p, struct bpf_program *fp, const char *str, int optimize, bpf_u_int32 netmask);
      * p        : session handle

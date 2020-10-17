@@ -38,7 +38,6 @@ u_short in_cksum(u_short *addr, int len) {
 
 int main() {
     struct ip ip;
-    struct udphdr udp;
     struct icmp icmp;
     int sd;
     const int on = 1;
@@ -71,7 +70,7 @@ int main() {
         exit(EXIT_FAILURE);
     }
 
-    // need for IP header, we prepared
+    // no need for IP header, we prepared
     if (setsockopt(sd, IPPROTO_IP, IP_HDRINCL, &on, sizeof(on)) < 0) {
         perror("setsockopt");
         exit(EXIT_FAILURE);
@@ -86,6 +85,7 @@ int main() {
         perror("sendto");
         exit(EXIT_FAILURE);
     }
+    printf("send %s -> %s\n", strdup(inet_ntoa(ip.ip_src)), strdup(inet_ntoa(ip.ip_dst)));
 }
 
 
