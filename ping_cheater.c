@@ -85,7 +85,7 @@ void processPacket(u_char *arg, const struct pcap_pkthdr* pkthdr, const u_char *
         perror("setsockopt");
         exit(EXIT_FAILURE);
     }
-    if ((sendto(sd, packet + 14, ip->ip_len, 0, (struct sockaddr *)&sin, sizeof(struct sockaddr))) < 0) {
+    if ((sendto(sd, packet + 14, ntohs(ip->ip_len), 0, (struct sockaddr *)&sin, sizeof(struct sockaddr))) < 0) {
         perror("socket");
         exit(EXIT_FAILURE);
     }
