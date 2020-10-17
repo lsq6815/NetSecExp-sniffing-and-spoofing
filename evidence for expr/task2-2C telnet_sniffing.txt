@@ -1,0 +1,530 @@
+Use default filter: 
+Interfaces present on the system are:
+1: eth0
+	No description available
+2: lo
+	No description available
+3: any
+	Pseudo-device that captures on all interfaces
+4: bluetooth-monitor
+	Bluetooth Linux Monitor
+5: nflog
+	Linux netfilter log (NFLOG) interface
+6: nfqueue
+	Linux netfilter queue (NFQUEUE) interface
+7: dbus-system
+	D-Bus system bus
+8: dbus-session
+	D-Bus session bus
+Choose default devices: eth0
+Device eth0:
+	IP:	10.0.2.0
+	Mask:	255.255.255.0
+Open device eth0 success!
+Device eth0 support Ethernet headers
+Compiling filter 
+Install BFP
+Capturing now:
+Packet: 1
+Capture: 74 B; Packet: 74 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 40 B; SEQ: 448469289; ACK 0; FLAG: .S......]
+
+
+Packet: 2
+Capture: 74 B; Packet: 74 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 40 B; SEQ: 769144351; ACK 448469290; FLAG: .S..A...]
+
+
+Packet: 3
+Capture: 66 B; Packet: 66 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469290; ACK 769144352; FLAG: ....A...]
+
+
+Packet: 4
+Capture: 93 B; Packet: 93 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469290; ACK 769144352; FLAG: ...PA...]
+Payload 27B
+. . . . . . . . . . .   . . ! . . " . . ' . . . . . # 
+
+
+Packet: 5
+Capture: 66 B; Packet: 66 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144352; ACK 448469317; FLAG: ....A...]
+
+
+Packet: 6
+Capture: 81 B; Packet: 81 B
+08:00:27:6c:eb:4b -> 52:54:00:12:35:00 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 58.20.127.238 [size: 20 B; protocol: UDP]
+
+
+Packet: 7
+Capture: 140 B; Packet: 140 B
+52:54:00:12:35:00 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+58.20.127.238 -> 10.0.2.5 [size: 20 B; protocol: UDP]
+
+
+Packet: 8
+Capture: 78 B; Packet: 78 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144352; ACK 448469317; FLAG: ...PA...]
+Payload 12B
+. . . . .   . . # . . ' 
+
+
+Packet: 9
+Capture: 66 B; Packet: 66 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469317; ACK 769144364; FLAG: ....A...]
+
+
+Packet: 10
+Capture: 105 B; Packet: 105 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144364; ACK 448469317; FLAG: ...PA...]
+Payload 39B
+. . . . . . . . ! . . " . . . . .   . . . . . # . . . . . ' . . . 
+. . . . . . 
+
+
+Packet: 11
+Capture: 66 B; Packet: 66 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469317; ACK 769144403; FLAG: ....A...]
+
+
+Packet: 12
+Capture: 149 B; Packet: 149 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469317; ACK 769144403; FLAG: ...PA...]
+Payload 83B
+. . . . _ . " . . . .   . 3 8 4 0 0 , 3 8 4 0 0 . . . . # . k a l 
+i : 0 . 0 . . . . ' . . D I S P L A Y . k a l i : 0 . 0 . . . . 
+. . x t e r m - 2 5 6 c o l o r . . 
+
+
+Packet: 13
+Capture: 66 B; Packet: 66 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144403; ACK 448469400; FLAG: ....A...]
+
+
+Packet: 14
+Capture: 69 B; Packet: 69 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144403; ACK 448469400; FLAG: ...PA...]
+Payload 3B
+. . . 
+
+
+Packet: 15
+Capture: 66 B; Packet: 66 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469400; ACK 769144406; FLAG: ....A...]
+
+
+Packet: 16
+Capture: 69 B; Packet: 69 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469400; ACK 769144406; FLAG: ...PA...]
+Payload 3B
+. . . 
+
+
+Packet: 17
+Capture: 66 B; Packet: 66 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144406; ACK 448469403; FLAG: ....A...]
+
+
+Packet: 18
+Capture: 69 B; Packet: 69 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144406; ACK 448469403; FLAG: ...PA...]
+Payload 3B
+. . . 
+
+
+Packet: 19
+Capture: 66 B; Packet: 66 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469403; ACK 769144409; FLAG: ....A...]
+
+
+Packet: 20
+Capture: 69 B; Packet: 69 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469403; ACK 769144409; FLAG: ...PA...]
+Payload 3B
+. . . 
+
+
+Packet: 21
+Capture: 90 B; Packet: 90 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144409; ACK 448469403; FLAG: ...PA...]
+Payload 24B
+K a l i   G N U / L i n u x   R o l l i n g . . 
+
+
+Packet: 22
+Capture: 66 B; Packet: 66 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144433; ACK 448469406; FLAG: ....A...]
+
+
+Packet: 23
+Capture: 66 B; Packet: 66 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469406; ACK 769144433; FLAG: ....A...]
+
+
+Packet: 24
+Capture: 78 B; Packet: 78 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144433; ACK 448469406; FLAG: ...PA...]
+Payload 12B
+k a l i   l o g i n :   
+
+
+Packet: 25
+Capture: 66 B; Packet: 66 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469406; ACK 769144445; FLAG: ....A...]
+
+
+Packet: 26
+Capture: 67 B; Packet: 67 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469406; ACK 769144445; FLAG: ...PA...]
+Payload 1B
+k 
+
+
+Packet: 27
+Capture: 66 B; Packet: 66 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144445; ACK 448469407; FLAG: ....A...]
+
+
+Packet: 28
+Capture: 67 B; Packet: 67 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144445; ACK 448469407; FLAG: ...PA...]
+Payload 1B
+k 
+
+
+Packet: 29
+Capture: 66 B; Packet: 66 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469407; ACK 769144446; FLAG: ....A...]
+
+
+Packet: 30
+Capture: 67 B; Packet: 67 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469407; ACK 769144446; FLAG: ...PA...]
+Payload 1B
+a 
+
+
+Packet: 31
+Capture: 66 B; Packet: 66 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144446; ACK 448469408; FLAG: ....A...]
+
+
+Packet: 32
+Capture: 67 B; Packet: 67 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144446; ACK 448469408; FLAG: ...PA...]
+Payload 1B
+a 
+
+
+Packet: 33
+Capture: 66 B; Packet: 66 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469408; ACK 769144447; FLAG: ....A...]
+
+
+Packet: 34
+Capture: 67 B; Packet: 67 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469408; ACK 769144447; FLAG: ...PA...]
+Payload 1B
+l 
+
+
+Packet: 35
+Capture: 66 B; Packet: 66 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144447; ACK 448469409; FLAG: ....A...]
+
+
+Packet: 36
+Capture: 67 B; Packet: 67 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144447; ACK 448469409; FLAG: ...PA...]
+Payload 1B
+l 
+
+
+Packet: 37
+Capture: 66 B; Packet: 66 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469409; ACK 769144448; FLAG: ....A...]
+
+
+Packet: 38
+Capture: 67 B; Packet: 67 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469409; ACK 769144448; FLAG: ...PA...]
+Payload 1B
+i 
+
+
+Packet: 39
+Capture: 67 B; Packet: 67 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144448; ACK 448469410; FLAG: ...PA...]
+Payload 1B
+i 
+
+
+Packet: 40
+Capture: 66 B; Packet: 66 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469410; ACK 769144449; FLAG: ....A...]
+
+
+Packet: 41
+Capture: 68 B; Packet: 68 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469410; ACK 769144449; FLAG: ...PA...]
+Payload 2B
+. . 
+
+
+Packet: 42
+Capture: 68 B; Packet: 68 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144449; ACK 448469412; FLAG: ...PA...]
+Payload 2B
+. . 
+
+
+Packet: 43
+Capture: 66 B; Packet: 66 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469412; ACK 769144451; FLAG: ....A...]
+
+
+Packet: 44
+Capture: 76 B; Packet: 76 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144451; ACK 448469412; FLAG: ...PA...]
+Payload 10B
+P a s s w o r d :   
+
+
+Packet: 45
+Capture: 66 B; Packet: 66 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469412; ACK 769144461; FLAG: ....A...]
+
+
+Packet: 46
+Capture: 67 B; Packet: 67 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469412; ACK 769144461; FLAG: ...PA...]
+Payload 1B
+k 
+
+
+Packet: 47
+Capture: 66 B; Packet: 66 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144461; ACK 448469413; FLAG: ....A...]
+
+
+Packet: 48
+Capture: 67 B; Packet: 67 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469413; ACK 769144461; FLAG: ...PA...]
+Payload 1B
+a 
+
+
+Packet: 49
+Capture: 66 B; Packet: 66 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144461; ACK 448469414; FLAG: ....A...]
+
+
+Packet: 50
+Capture: 67 B; Packet: 67 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469414; ACK 769144461; FLAG: ...PA...]
+Payload 1B
+l 
+
+
+Packet: 51
+Capture: 66 B; Packet: 66 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144461; ACK 448469415; FLAG: ....A...]
+
+
+Packet: 52
+Capture: 67 B; Packet: 67 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469415; ACK 769144461; FLAG: ...PA...]
+Payload 1B
+i 
+
+
+Packet: 53
+Capture: 66 B; Packet: 66 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144461; ACK 448469416; FLAG: ....A...]
+
+
+Packet: 54
+Capture: 68 B; Packet: 68 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469416; ACK 769144461; FLAG: ...PA...]
+Payload 2B
+. . 
+
+
+Packet: 55
+Capture: 66 B; Packet: 66 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144461; ACK 448469418; FLAG: ....A...]
+
+
+Packet: 56
+Capture: 68 B; Packet: 68 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144461; ACK 448469418; FLAG: ...PA...]
+Payload 2B
+. . 
+
+
+Packet: 57
+Capture: 66 B; Packet: 66 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469418; ACK 769144463; FLAG: ....A...]
+
+
+Packet: 58
+Capture: 497 B; Packet: 497 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144463; ACK 448469418; FLAG: ...PA...]
+Payload 431B
+L i n u x   k a l i   5 . 7 . 0 - k a l i 1 - a m d 6 4   # 1   S 
+M P   D e b i a n   5 . 7 . 6 - 1 k a l i 2   ( 2 0 2 0 - 0 7 - 
+0 1 )   x 8 6 _ 6 4 . . . . T h e   p r o g r a m s   i n c l u 
+d e d   w i t h   t h e   K a l i   G N U / L i n u x   s y s t 
+e m   a r e   f r e e   s o f t w a r e ; . . t h e   e x a c t 
+  d i s t r i b u t i o n   t e r m s   f o r   e a c h   p r o 
+g r a m   a r e   d e s c r i b e d   i n   t h e . . i n d i v 
+i d u a l   f i l e s   i n   / u s r / s h a r e / d o c / * / 
+c o p y r i g h t . . . . . K a l i   G N U / L i n u x   c o m 
+e s   w i t h   A B S O L U T E L Y   N O   W A R R A N T Y ,   
+t o   t h e   e x t e n t . . p e r m i t t e d   b y   a p p l 
+i c a b l e   l a w . . . L a s t   l o g i n :   S a t   O c t 
+  1 7   0 6 : 2 9 : 4 8   E D T   2 0 2 0   f r o m   1 0 . 0 . 
+2 . 4   o n   p t s / 1 . . 
+
+
+Packet: 59
+Capture: 66 B; Packet: 66 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469418; ACK 769144894; FLAG: ....A...]
+
+
+Packet: 60
+Capture: 120 B; Packet: 120 B
+08:00:27:6c:eb:4b -> 08:00:27:89:8b:17 [size: 14 B; protocol: IPv4]
+10.0.2.5 -> 10.0.2.4 [size: 20 B; protocol: TCP]
+23 -> 43924 [size: 32 B; SEQ: 769144894; ACK 448469418; FLAG: ...PA...]
+Payload 54B
+. ] 0 ; k a l i @ k a l i :   ~ . . [ 1 ; 3 4 m k a l i @ k a l i 
+. [ 0 0 m : . [ 1 ; 3 2 m ~ . [ 0 0 m $   
+
+
+Packet: 61
+Capture: 66 B; Packet: 66 B
+08:00:27:89:8b:17 -> 08:00:27:6c:eb:4b [size: 14 B; protocol: IPv4]
+10.0.2.4 -> 10.0.2.5 [size: 20 B; protocol: TCP]
+43924 -> 23 [size: 32 B; SEQ: 448469418; ACK 769144948; FLAG: ....A...]
+
+
+Packet: 62
+Capture: 42 B; Packet: 42 B
+08:00:27:6c:eb:4b -> 52:54:00:12:35:00 [size: 14 B; p
