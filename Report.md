@@ -33,6 +33,7 @@ Task Set 2: 使用C语言完成实验
 嗅探包的IP头中的源地址和目标地址
 
 ![Task2.1A](evidence_for_expr/task2-1A.png)
+
 > 图中给出了包的MAC地址，IP地址，和TCP端口
 
 ##### Question
@@ -57,6 +58,7 @@ Task Set 2: 使用C语言完成实验
     2.  在第3步会失败（参考第1个问题）
 
 3.  你能演示关闭或者开启混杂模式的区别吗？请描述你是怎么演示的。
+
     可以。
 
 #### 2.1B 使用filter
@@ -163,6 +165,7 @@ i
 使用嗅探程序证明你发送了伪装的包
 
 ![Task2.2A](evidence_for_expr/task2-2A.png)
+
 > 左边的嗅探程序使用的是`sniffing.out`，右边为包伪装程序
 
 #### 2.2B 伪装ICMP `echo request`包
@@ -176,10 +179,12 @@ i
 ##### Question
 1.  你可以把IP头的length域设为任意的大小吗？
     
-    可以，即使length小于IP头的最小大小20B也可以。但是`sendto`设置发送长度过大还可以，如果过小发出的包无法正确，如果小于20B，则直接发送失败。
+    可以，即使length小于IP头的最小大小20B也可以。但是`sendto`设置发送长度过大还可以，但如果小于20B，则直接报错。
+    
     通过在另一台虚拟机的嗅探`sniffing.out`/`tcpdump`，发现真正的长度由`sendto`控制
     
 2.  使用`raw socket`发送包，需要计算校验和吗？
+    
     不需要
     
 3.  为什么你需要root权限去执行程序，如果没有权限，在哪一步会报错？
