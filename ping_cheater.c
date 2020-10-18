@@ -47,14 +47,15 @@ void processPacket(u_char *arg, const struct pcap_pkthdr* pkthdr, const u_char *
     printf("Received Packet Size: %d\n", pkthdr->caplen);
 
     struct ether_header *ether = (struct ether_header *)packet;
+    // ignore if not carry ip header
     if (ntohs(ether->ether_type) != ETHER_TYPE_IP4) return;
 
     struct ip *ip = (struct ip *)(packet + 14);
-
+    // ignore if not carry icmp header
     if (ip->ip_p != IPPROTO_ICMP) return;
     
     struct icmp *icmp = (struct icmp *)(packet + 14 + ip->ip_hl * 4);
-
+    // ignore if type not set to echo request
     if (icmp->icmp_type != ICMP_ECHO) return;
 
     // exchange ip addr
@@ -75,16 +76,20 @@ void processPacket(u_char *arg, const struct pcap_pkthdr* pkthdr, const u_char *
     struct sockaddr_in sin;
     memset(&sin, 0, sizeof(sin));
     sin.sin_family = AF_INET;
+    // addr for socket use
     sin.sin_addr.s_addr = ip->ip_dst.s_addr;
 
+    // open socket as raw socket
     if ((sd = socket(AF_INET, SOCK_RAW, IPPROTO_RAW)) < 0) {
         perror("socket");
         exit(EXIT_FAILURE);
     }
+    // tell socket, we will supply ip header, no need add header itself
     if ((setsockopt(sd, IPPROTO_IP, IP_HDRINCL, &on, sizeof(on))) < 0) {
         perror("setsockopt");
         exit(EXIT_FAILURE);
     }
+    // send packet
     if ((sendto(sd, packet + 14, ntohs(ip->ip_len), 0, (struct sockaddr *)&sin, sizeof(struct sockaddr))) < 0) {
         perror("socket");
         exit(EXIT_FAILURE);

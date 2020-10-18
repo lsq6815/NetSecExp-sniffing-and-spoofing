@@ -81,7 +81,7 @@ int main() {
     sin.sin_family = AF_INET;
     sin.sin_addr.s_addr = ip.ip_dst.s_addr;
 
-    if (sendto(sd, packet, 60, 0, (struct sockaddr *)&sin, sizeof(struct sockaddr)) < 0) {
+    if (sendto(sd, packet, ntohs(ip.ip_len), 0, (struct sockaddr *)&sin, sizeof(struct sockaddr)) < 0) {
         perror("sendto");
         exit(EXIT_FAILURE);
     }

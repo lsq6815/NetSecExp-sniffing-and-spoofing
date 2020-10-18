@@ -61,6 +61,24 @@ Task Set 2: 使用C语言完成实验
 
     可以。
 
+    提前使用了task 2.2的程序，虚拟机A发送数据包，而另一台虚拟机使用`sniffing.out`接受数据包
+
+    **开启混杂模式**
+
+    ![question 3-1](evidence_for_expr/task2-2A.png)
+
+    > 不属于本机发出/受到的数据包也嗅探到了（虚拟机工作在子网10.0中）
+
+    **关闭混杂模式**
+
+    ![question 3-2](evidence_for_expr/question3.png)
+
+    > 没有受到不属于本机发出/受到的数据包
+
+    ![question 3-3](evidence_for_expr/question3-1.png)
+
+    > 可以看到，即使伪装成从虚拟机B发出的数据包，只要不是它本机发送的，就不会接受
+
 #### 2.1B 使用filter
 
 > 程序`snifffing.out`接受命令行参数来取代默认的filter参数（空）
